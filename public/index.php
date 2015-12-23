@@ -22,19 +22,12 @@
     <script src="js/app.js"></script>
     <script>
         $(function() {
-            var canvas = $('.js-ls-canvas')[0];
-            var ctx = canvas.getContext('2d');
+            var app = new App(
+                $('.js-ls-canvas')[0], 
+                120
+            );
             
-            for (var i = 0; i < 60; i++) {
-                ctx.fillStyle = '#0f0';
-                ctx.fillRect(0, i * 11, 10, 10);
-            }
-            
-            for (var i = 0; i < 60; i++) {
-                ctx.fillStyle = '#0ff';
-                ctx.fillRect(canvas.width - 10, i * 11, 10, 10);
-            }
-            
+            app.start();
         });
     </script>
 </body>
