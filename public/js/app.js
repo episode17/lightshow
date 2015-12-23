@@ -2,6 +2,7 @@
 
 /**
  * (1) App
+ * (2) Utils
  */
 
 
@@ -15,9 +16,9 @@ function App(canvas, length) {
     
     this.length = length;
     this.halfLength = Math.floor(length / 2);
-    // this.pixels = new Uint32Array(2 * this.halfLength);
-    this.pixels = new Array(2 * this.halfLength);
-    this.pixels.fill('#000');
+    this.pixels = new Uint32Array(2 * this.halfLength);
+    // this.pixels = new Array(2 * this.halfLength);
+    // this.pixels.fill('#000');
     
     // Render loop
     this.fps = 30;
@@ -68,20 +69,17 @@ App.prototype._update = function(dt, now) {
         this._clear();
         
         var p = Math.randInt(0, this.length);
-        this.pixels[p] = '#f00';
-        
-        var i = 0;
+        this.pixels[p] = Math.rgbToInt(255, 127, 0);
         
         // Left
-        for (i = 0; i < this.halfLength; i++) {
-            this.ctx.fillStyle = this.pixels[i];
+        for (var i = 0; i < this.halfLength; i++) {
+            this.ctx.fillStyle = Math.intToHex(this.pixels[i]);
             this.ctx.fillRect(0, (i * 11) + 1, 10, 10);
-
         }
         
         // Right
         for (i = 0; i < this.halfLength; i++) {
-            this.ctx.fillStyle = this.pixels[i + this.halfLength];
+            this.ctx.fillStyle = Math.intToHex(this.pixels[i + this.halfLength]);
             this.ctx.fillRect(this.canvas.width - 10, (i * 11) + 1, 10, 10);
         }
         // next = now + 0.1;
@@ -92,6 +90,7 @@ App.prototype._update = function(dt, now) {
 App.prototype._clear = function() {
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 }
+
 
 
 /**
@@ -107,4 +106,20 @@ Math.degrees = function(radians) {
 
 Math.randInt = function(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+Math.intToRgb = function(i) {
+    return {
+        r: (i & 0xff0000) >> 16, 
+        g: (i & 0x00ff00) >> 8, 
+        b: (i & 0x0000ff)
+    };
+}
+
+Math.rgbToInt = function(r, g, b) {
+    return (r << 16) + (g << 8) + (b);
+}
+
+Math.intToHex = function(i) {
+    return '#' + ('00000' + (i | 0).toString(16)).substr(-6); 
 }
